@@ -1,12 +1,45 @@
-import React from 'react';
-import { View } from 'react-native';
+import React, { Component } from 'react';
+import { View, TextInput, Button } from 'react-native';
+import firebase from 'firebase';
 
-function Register(props) {
-    return (
-        <View>
+class Register extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            email: '',
+            name: '',
+            password: '',
+        };
+        this.handleSignUp = this.handleSignUp.bind(this);
+    }
 
-        </View>
-    );
+    handleSignUp() {
+        const { email, name, password } = this.state;
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then(res => {
+            console.log(res)
+        })
+        .catch(err => console.log(err))
+    }
+    render() {
+        return (
+            <View>
+                <TextInput 
+                    placeholder="name"
+                    onChangeText={(name) => this.setState({name})}/>
+                <TextInput 
+                    placeholder="email"
+                    onChangeText={(email) => this.setState({email})}/>
+                <TextInput 
+                    placeholder="password"
+                    onChangeText={(password) => this.setState({password})}
+                    secureTextEntry={true}/>
+                <Button
+                    title="Sign up"
+                    onPress={this.handleSignUp}/>
+            </View>
+        );
+    }
 }
 
 export default Register;

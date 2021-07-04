@@ -12,9 +12,9 @@ import {
   APP_ID, 
   MEASUREMENT_ID 
 } from '@env';
-import LandingPage from './components/Landing';
-import RegisterPage from './components/Register';
-import * as firebase from 'firebase';
+import LandingPage from './components/auth/Landing';
+import RegisterPage from './components/auth/Register';
+import firebase from 'firebase';
 import { View, Text, StyleSheet} from 'react-native';
 
 const firebaseConfig = {
@@ -81,6 +81,6 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: center
+    justifyContent: 'center'
   }
 })

@@ -14,8 +14,15 @@ import {
 } from '@env';
 import LandingPage from './components/auth/Landing';
 import RegisterPage from './components/auth/Register';
+import MainPage from './components/Main';
 import firebase from 'firebase';
 import { View, Text, StyleSheet} from 'react-native';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
+import rootReducers from './redux/reducers';
+
+const store = createStore(rootReducers, applyMiddleware(thunk))
 
 const firebaseConfig = {
   apiKey: API_KEY,
@@ -69,11 +76,9 @@ export default function App() {
     );
   } else {
     return (
-      <View style={styles.container}>
-        <Text>
-          User is logged in.
-        </Text>
-      </View>
+      <Provider store={store}>
+        <MainPage/>
+      </Provider>
     )
   }
 }

@@ -3,6 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+
 import { 
   API_KEY, 
   AUTH_DOMAIN, 
@@ -12,10 +13,13 @@ import {
   APP_ID, 
   MEASUREMENT_ID 
 } from '@env';
+
 import LandingPage from './components/auth/Landing';
 import RegisterPage from './components/auth/Register';
 import MainPage from './components/Main';
+
 import firebase from 'firebase';
+
 import { View, Text, StyleSheet} from 'react-native';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
@@ -77,6 +81,9 @@ export default function App() {
   } else {
     return (
       <Provider store={store}>
+        <Stack.Navigator initialRouteName="Main">
+          <Stack.Screen name="Main" component={MainPage} options={{ headerShown: false }} />
+        </Stack.Navigator>
         <MainPage/>
       </Provider>
     )

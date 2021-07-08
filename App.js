@@ -17,6 +17,7 @@ import {
 import LandingScreen from './components/auth/Landing';
 import RegisterScreen from './components/auth/Register';
 import MainScreen from './components/Main';
+import AddScreen from './components/main/Add';
 
 import firebase from 'firebase';
 
@@ -84,9 +85,9 @@ export default function App() {
         <NavigationContainer>
           <Stack.Navigator initialRouteName="Main">
             <Stack.Screen name="Main" component={MainScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="Add" component={AddScreen} />
           </Stack.Navigator>
         </NavigationContainer>
-        <MainScreen/>
       </Provider>
     )
   }

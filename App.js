@@ -14,9 +14,9 @@ import {
   MEASUREMENT_ID 
 } from '@env';
 
-import LandingPage from './components/auth/Landing';
-import RegisterPage from './components/auth/Register';
-import MainPage from './components/Main';
+import LandingScreen from './components/auth/Landing';
+import RegisterScreen from './components/auth/Register';
+import MainScreen from './components/Main';
 
 import firebase from 'firebase';
 
@@ -73,18 +73,20 @@ export default function App() {
     return (
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Landing">
-          <Stack.Screen name="Landing" component={LandingPage} options={{ headerShown: false }} />
-          <Stack.Screen name="Register" component={RegisterPage} />
+          <Stack.Screen name="Landing" component={LandingScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="Register" component={RegisterScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     );
   } else {
     return (
       <Provider store={store}>
-        <Stack.Navigator initialRouteName="Main">
-          <Stack.Screen name="Main" component={MainPage} options={{ headerShown: false }} />
-        </Stack.Navigator>
-        <MainPage/>
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="Main">
+            <Stack.Screen name="Main" component={MainScreen} options={{ headerShown: false }} />
+          </Stack.Navigator>
+        </NavigationContainer>
+        <MainScreen/>
       </Provider>
     )
   }

@@ -17,7 +17,7 @@ function Add(props) {
 
     }, []);
 
-    const flipCam = () => {
+    const handleFlipCam = () => {
         setType(
             type === Camera.Constants.Type.back
             ? Camera.Constants.Type.front
@@ -25,7 +25,7 @@ function Add(props) {
         )
     }
 
-    const takePicture = async () => {
+    const handleTakePicture = async () => {
         if (camera) {
             const data = await camera.takePictureAsync(null);
             setImage(data.uri);
@@ -45,10 +45,10 @@ function Add(props) {
                 </View>
                 <Button //Add icon
                     title="Flip Camera"
-                    onPress={flipCam}/>
+                    onPress={handleFlipCam}/>
                 <Button //Add icon
                     title="Take Photo"
-                    onPress={() => takePicture()}/>
+                    onPress={() => handleTakePicture()}/>
                 { image ? <Image source={{uri: image}} style={styles.container}/> : null}
             </View>
     )

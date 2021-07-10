@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, Button} from 'react-native';
+import { Text, View, StyleSheet, Button, Image } from 'react-native';
 import { Camera } from 'expo-camera';
 
 
 function Add(props) {
+    const [camera, setCamera] = useState(null);
+    const [image, setImage] = useState(null);
     const [hasPermission, setHasPermission] = useState(null);
     const [type, setType] = useState(Camera.Constants.Type.back);
 
@@ -22,6 +24,14 @@ function Add(props) {
             : Camera.Constants.Type.back
         )
     }
+
+    const takePicture = async () => {
+        if (camera) {
+            const data = await camera.takePictureAsync(null);
+            setImage(data.uri);
+        }
+    }
+
     return (
         hasPermission === null //Error
         ?   <View/>
@@ -31,11 +41,15 @@ function Add(props) {
             </Text>
         :   <View style={styles.container}>
                 <View style={styles.camContainer}>
-                    <Camera style={styles.fixedRatio} type={type} ratio={'1:1'}/>
+                    <Camera ref={ref => setCamera(ref)} style={styles.fixedRatio} type={type} ratio={'1:1'}/>
                 </View>
-                <Button
+                <Button //Add icon
                     title="Flip Camera"
                     onPress={flipCam}/>
+                <Button //Add icon
+                    title="Take Photo"
+                    onPress={() => takePicture()}/>
+                { image ? <Image source={{uri: image}} style={styles.container}/> : null}
             </View>
     )
 }

@@ -18,6 +18,7 @@ import LandingScreen from './components/auth/Landing';
 import RegisterScreen from './components/auth/Register';
 import MainScreen from './components/Main';
 import AddScreen from './components/main/Add';
+import SaveScreen from './components/main/Save';
 
 import firebase from 'firebase';
 
@@ -86,6 +87,7 @@ export default function App() {
           <Stack.Navigator initialRouteName="Main">
             <Stack.Screen name="Main" component={MainScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Add" component={AddScreen} />
+            <Stack.Screen name="Save" component={SaveScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>

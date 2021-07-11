@@ -3,9 +3,9 @@ import { View, Text } from 'react-native';
 
 function Feed(props) {
     return (
-        <div>
+        <View>
             
-        </div>
+        </View>
     );
 }
 

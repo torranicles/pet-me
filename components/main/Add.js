@@ -5,7 +5,7 @@ import * as ImagePicker from 'expo-image-picker';
 
 
 
-function Add(props) {
+function Add({ navigation }) {
     const [camera, setCamera] = useState(null);
     const [image, setImage] = useState(null);
     const [hasGalleryPermission, setHasGalleryPermission] = useState(null);
@@ -71,6 +71,9 @@ function Add(props) {
                 <Button //Add icon
                     title="Pick Image from Gallery"
                     onPress={() => handlePickImage()}/>
+                <Button //Add icon
+                    title="Save"
+                    onPress={() => navigation.navigate('Save', {image})}/>
                 { image ? <Image source={{uri: image}} style={styles.container}/> : null}
             </View>
     )

@@ -1,21 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Button, Image } from 'react-native';
 import { Camera } from 'expo-camera';
+import * as ImagePicker from 'expo-image-picker';
+
 
 
 function Add(props) {
     const [camera, setCamera] = useState(null);
     const [image, setImage] = useState(null);
-    const [hasPermission, setHasPermission] = useState(null);
+    const [hasGalleryPermission, setHasGalleryPermission] = useState(null);
+    const [hasCameraPermission, setHasCameraPermission] = useState(null);
     const [type, setType] = useState(Camera.Constants.Type.back);
 
     useEffect(() => {
         (async () => {
-            const { status } = await Camera.requestPermissionsAsync();
-            setHasPermission(status === 'granted');
+            const cameraStatus = await Camera.requestPermissionsAsync();
+            setHasCameraPermission(cameraStatus.status === 'granted');
+            const galleryStatus = await ImagePicker.requestMediaLibraryPermissionsAsync();
+            setHasGalleryPermission(galleryStatus.status === 'granted');
         })();
-
     }, []);
+
+    const handlePickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.Images,
+          allowsEditing: true,
+          aspect: [1, 1],
+          quality: 1,
+        });
+    
+        console.log(result);
+    
+        if (!result.cancelled) {
+          setImage(result.uri);
+        }
+      };
 
     const handleFlipCam = () => {
         setType(
@@ -33,9 +52,9 @@ function Add(props) {
     }
 
     return (
-        hasPermission === null //Error
+        hasCameraPermission === null || hasGalleryPermission === null //Error
         ?   <View/>
-        : hasPermission === false
+        : hasCameraPermission === false || hasGalleryPermission === false
         ?   <Text>
                 App does not have permission to access the camera.
             </Text>
@@ -49,6 +68,9 @@ function Add(props) {
                 <Button //Add icon
                     title="Take Photo"
                     onPress={() => handleTakePicture()}/>
+                <Button //Add icon
+                    title="Pick Image from Gallery"
+                    onPress={() => handlePickImage()}/>
                 { image ? <Image source={{uri: image}} style={styles.container}/> : null}
             </View>
     )

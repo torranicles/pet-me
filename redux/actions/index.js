@@ -13,7 +13,8 @@ export const fetchUser = () => {
                         dispatch({
                             type: USER_STATE_CHANGE,
                             currentUser: doc.data()
-                        })
+                        });
+                        console.log(doc.data())
                     } else {
                         console.log("Document not found.") //Update
                     }

@@ -1,20 +1,67 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView, View, Text, Image, FlatList, StyleSheet, StatusBar, Platform } from 'react-native';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
+import firebase from 'firebase';
+import 'firebase/firestore';
 
 function Profile(props) {
-    const { currentUser, posts } = props;
+    const [userPosts, setUserPosts] = useState([]);
+    const [user, setUser] = useState(null)
+
+    const userId = props.route.params.userId;
+
+    useEffect(() => {
+        const { currentUser, posts } = props;
+        if (props.route.params.userId === firebase.auth().currentUser.uid) {
+            setUser(currentUser);
+            setUserPosts(posts);
+        } else {
+            firebase.firestore()
+                .collection("users")
+                .doc(userId)
+                .get()
+                .then(doc => {
+                    if (doc.exists) {
+                        setUser(doc.data())
+                    } else {
+                        console.log("Document not found.") //Update
+                    }
+                });
+            firebase.firestore()
+                .collection("posts")
+                .doc(userId)
+                .collection("userPosts")
+                .orderBy("creation", "asc")
+                .get()
+                .then(snapshot => {
+                    let posts;
+                    if (snapshot) {
+                        posts = snapshot.docs.map(doc => {
+                            let id = doc.id;
+                            let data = doc.data();
+                            return {id, ...data}
+                        })
+                    }
+                    setUserPosts(posts)
+                })
+        }
+    }, [userId]);
+
+    if (user === null) { //Update
+        return <View/>
+    };
+    console.log(user)
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.infoContainer}>
-                <Text>{currentUser.name}</Text>
-                <Text>{currentUser.email}</Text>
+                <View>{user.name}</View>
+                <View>{user.email}</View>
             </View>
             <View style={styles.galleryContainer}>
                 <FlatList 
                     horizontal={false} 
                     numColumns={3} 
-                    data={posts} //add componentDidUpdate
+                    data={userPosts} //add componentDidUpdate
                     renderItem={item => (
                         <View style={styles.imageContainer}>
                             <Image source={{uri: item.downloadUrl}}/>

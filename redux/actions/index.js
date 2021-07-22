@@ -22,6 +22,7 @@ export const fetchUser = () => {
         }
     )
 }
+
 export const fetchUserPosts = () => {
     return (
         (dispatch) => {
@@ -68,13 +69,16 @@ export const fetchUserFollowing = () => {
                     dispatch({
                         type: USER_FOLLOWING_STATE_CHANGE,
                         following
-                    })
+                    });
+                    for (let i = 0; i < following.length; i++) {
+                        dispatch(fetchUsersData(following[i]))
+                    }
                 })
         }
     )
 }
 
-export const fetchUserData = (uid) => {
+export const fetchUsersData = (uid) => {
     return ((dispatch, getState) => {
         const found = getState().usersState.users.some(el => el.uid === uid);
 
@@ -91,6 +95,7 @@ export const fetchUserData = (uid) => {
                             type: USERS_DATA_STATE_CHANGE,
                             user
                         });
+                        dispatch(fetchUsersFollowingPosts(user.id));
                         console.log(doc.data())
                     } else {
                         console.log("Document not found.") //Update
@@ -98,4 +103,34 @@ export const fetchUserData = (uid) => {
                 })
         }
     })
+}
+
+export const fetchUsersFollowingPosts = (uid) => {
+    return (
+        (dispatch) => {
+            firebase.firestore()
+                .collection("posts")
+                .doc(uid)
+                .collection("userPosts")
+                .orderBy("creation", "asc")
+                .get()
+                .then(snapshot => {    
+                    const uid =   snapshot.query.EP.path.segments[1]; 
+                    const user = getState().usersState.users.find(el => el.uid === uid);
+                    let posts;
+                    if (snapshot) {
+                        posts = snapshot.docs.map(doc => {
+                            let id = doc.id;
+                            let data = doc.data();
+                            return { id, ...data, user }
+                        })
+                    }
+                    dispatch({
+                        type: USERS_POSTS_STATE_CHANGE,
+                        uid,
+                        posts
+                    })
+                })
+        }
+    )
 }

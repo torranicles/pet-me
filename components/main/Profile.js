@@ -7,7 +7,7 @@ import 'firebase/firestore';
 function Profile(props) {
     const [userPosts, setUserPosts] = useState([]);
     const [user, setUser] = useState(null);
-    conse [following, setFollowing] = useState(false);
+    const [following, setFollowing] = useState(false);
 
     const userId = props.route.params.userId;
     const currentUserId = firebase.auth().currentUser.uid;
@@ -111,7 +111,7 @@ function Profile(props) {
 const mapStateToProps = (store) => ({
     currentUser: store.userState.currentUser,
     posts: store.userState.posts,
-    following: store.userState.userFollowing
+    following: store.userState.following
 })
 
 const styles = StyleSheet.create({
